@@ -15,11 +15,11 @@ body{
   overflow-x:hidden; min-height:100vh; color:#fff;
 }
 
-/* Corazones flotando */
+/* Corazones */
 .heart{position:fixed; bottom:-10px; font-size:20px; color:rgba(255,100,150,0.85); pointer-events:none; animation:floatUp linear infinite; z-index:1;}
 @keyframes floatUp{0%{transform:translateY(0) scale(0.8);opacity:0.9}100%{transform:translateY(-120vh) scale(1.6);opacity:0}}
 
-/* Palabras top flotando */
+/* Palabras top con brillo y flotando */
 .word-container{
   display:flex; flex-wrap:wrap; justify-content:center;
   width:100%; padding:12px 16px; gap:10px; z-index:4; pointer-events:none;
@@ -93,7 +93,7 @@ body{
   border-radius:28px; background:linear-gradient(90deg,#ff76a1,#ff4d7a);
   color:white; cursor:pointer; font-weight:700;
 }
-#btn-carta2 { display: none; } /* inicia oculto */
+#btn-carta2 { display: none; }
 
 /* Cartas */
 #carta,#carta2{
@@ -118,9 +118,11 @@ body{
   z-index:4;text-shadow:0 6px 20px rgba(255,0,120,0.07);
 }
 
-#fecha-msg{
-  display:none; margin-top:12px; font-size:28px; font-weight:700;
-  color:#c085ff; text-align:center;
+/* Texto final de fecha */
+#fecha-final{
+  margin-top:18px;font-size:24px;font-weight:700;
+  color:#ff9acb;text-align:center;
+  z-index:4;
 }
 
 /* Responsive */
@@ -136,7 +138,7 @@ body{
 </head>
 <body>
 
-<audio id="bg-audio" autoplay loop>
+<audio id="bg-audio" loop>
   <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
@@ -173,10 +175,10 @@ body{
 </div>
 
 <div id="final-msg">Feliz cumpleaños, mi amor ❤️</div>
-<div id="fecha-msg">💜 15.02.2025 💜</div>
+<div id="fecha-final">💜 15.02.2025 💜</div>
 
 <script>
-// Palabras top
+// Palabras top con colores y efecto flotante
 const wordsTop=["hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa","tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora","fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"];
 const colors=["#ff4f4f","#ffd700","#6ab8ff","#ff7af6","#8aff91","#ffb347","#b28cff","#ffd1aa"];
 
@@ -266,8 +268,13 @@ function escribirCarta(){
     setTimeout(escribirCarta,32);
   } else {
     // Mostrar fotos + texto
-    document.getElementById('fotos-section').style.display='flex';
-    setTimeout(()=>{ document.getElementById('btn-carta2').style.display='block'; },1000);
+    const fotosSection = document.getElementById('fotos-section');
+    fotosSection.style.display='flex';
+
+    // Mostrar el segundo botón después de 1 seg
+    setTimeout(()=>{
+      document.getElementById('btn-carta2').style.display='block';
+    },1000);
   }
 }
 
@@ -298,16 +305,29 @@ function escribirCarta2(){
     p.textContent+=carta2Texto.charAt(idx2);
     idx2++;
     setTimeout(escribirCarta2,32);
-  } else {
+  }else{
     document.getElementById('final-msg').style.display='block';
-    document.getElementById('fecha-msg').style.display='block';
   }
 }
 
-// Audio
-const audio=document.getElementById('bg-audio');
-audio.addEventListener('play',()=>{});
-audio.addEventListener('error',()=>{});
+// Música autoplay
+window.addEventListener('load', () => {
+  const audio = document.getElementById('bg-audio');
+  audio.play().catch(() => {
+    // Mostrar botón de play si navegador bloquea autoplay
+    const btnPlay = document.createElement('button');
+    btnPlay.textContent = "🎵 Reproducir música";
+    btnPlay.style.position = "fixed";
+    btnPlay.style.top = "18px";
+    btnPlay.style.right = "18px";
+    btnPlay.style.padding = "10px 14px";
+    btnPlay.style.borderRadius = "14px";
+    btnPlay.style.zIndex = "10";
+    btnPlay.style.cursor = "pointer";
+    btnPlay.onclick = () => { audio.play(); btnPlay.remove(); };
+    document.body.appendChild(btnPlay);
+  });
+});
 </script>
 
 </body>
