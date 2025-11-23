@@ -93,6 +93,7 @@ body{
   border-radius:28px; background:linear-gradient(90deg,#ff76a1,#ff4d7a);
   color:white; cursor:pointer; font-weight:700;
 }
+#btn-carta2 { display: none; } /* inicia oculto */
 
 /* Cartas */
 #carta,#carta2{
@@ -169,11 +170,10 @@ body{
 <div id="final-msg">Feliz cumpleaños, mi amor ❤️</div>
 
 <script>
-// Colores y palabras top
+// Palabras top con colores y efecto flotante
 const wordsTop=["hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa","tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora","fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"];
 const colors=["#ff4f4f","#ffd700","#6ab8ff","#ff7af6","#8aff91","#ffb347","#b28cff","#ffd1aa"];
 
-// Animación palabras top cada 3s con movimiento horizontal aleatorio
 function animateWordsTop(list){
   const container=document.getElementById("topWords");
   container.innerHTML="";
@@ -263,7 +263,7 @@ function escribirCarta(){
     const fotosSection = document.getElementById('fotos-section');
     fotosSection.style.display='flex';
 
-    // Mostrar el segundo botón **después de 1 segundo de que aparezcan fotos**
+    // Mostrar el segundo botón **1 segundo después**
     setTimeout(()=>{
       document.getElementById('btn-carta2').style.display='block';
     },1000);
@@ -311,11 +311,4 @@ setTimeout(()=>{
     const p=document.createElement('div');
     p.style.position='fixed';
     p.style.right='18px'; p.style.bottom='18px'; p.style.zIndex='6';
-    p.innerHTML='<button style="padding:10px 14px;border-radius:14px;border:none;background:linear-gradient(90deg,#ff76a1,#ff4d7a);color:#fff;font-weight:700;">Reproducir música</button>';
-    document.body.appendChild(p);
-    p.querySelector('button').onclick=()=>{audio.play().catch(()=>{});p.remove();}
-  }
-},800);
-</script>
-</body>
-</html>
+    p.innerHTML='<button style="padding:10px 14px;border-radius:14px;
