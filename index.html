@@ -156,6 +156,29 @@
     .word{ font-size: 18px }
     .titulo-type{ font-size: 34px }
   }
+  /* FOTOS DESPUÉS DE LA CARTA (medianas y con efectos) */
+  .fotos-despues{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:14px;
+    margin-top:24px;
+    z-index:4;
+  }
+  .fotos-despues img{
+    width:240px;
+    height:auto;
+    border-radius:18px;
+    object-fit:cover;
+    box-shadow:0 12px 28px rgba(0,0,0,0.55);
+    transition: transform .35s ease, box-shadow .35s ease;
+    border:3px solid rgba(255,255,255,0.08);
+  }
+  .fotos-despues img:hover{
+    transform: scale(1.08);
+    box-shadow:0 16px 38px rgba(255,80,140,0.35);
+  }
+
 </style>
 </head>
 <body>
@@ -187,6 +210,14 @@
 <!-- carta -->
 <div id="carta" role="article" aria-live="polite">
   <p id="textoCarta"></p>
+</div>
+
+<!-- Fotos después de la carta -->
+<div class="photos fotos-despues">
+  <img src="foto1.jpg" class="foto-efecto">
+  <img src="foto2.jpg" class="foto-efecto">
+  <img src="foto3.jpg" class="foto-efecto">
+  <img src="foto4.jpg" class="foto-efecto">
 </div>
 
 <!-- mensaje final -->
