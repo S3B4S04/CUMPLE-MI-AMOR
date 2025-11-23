@@ -77,7 +77,7 @@ body{
 
 /* Fotos después de carta */
 #fotos-section{display:none; flex-direction:column; align-items:center; margin-top:24px;}
-#fotos-section h2{font-size:28px; margin-bottom:16px; color:#ff9acb;}
+#fotos-section h2{text-align:center; font-size:28px; margin-bottom:12px; color:#ff9acb;}
 .foto-item{
   width:180px; height:180px; border-radius:16px;
   object-fit:cover; margin:8px 0;
@@ -151,8 +151,9 @@ body{
   <p id="textoCarta"></p>
 </div>
 
+<!-- Fotos + texto "Te amo mucho" -->
 <div id="fotos-section">
-  <h2>Nuestros momentos juntos</h2>
+  <h2>Te amo mucho ❤️</h2>
   <img src="foto1.jpg" class="foto-item" style="align-self:flex-start;">
   <img src="foto2.jpg" class="foto-item" style="align-self:flex-end;">
   <img src="foto3.jpg" class="foto-item" style="align-self:flex-start;">
@@ -186,9 +187,8 @@ function animateWordsTop(list){
     container.appendChild(span);
     setTimeout(()=>span.classList.add('show'),50);
 
-    // asignar desplazamiento horizontal aleatorio
+    // desplazamiento horizontal aleatorio
     const shift = Math.random()*12 - 6; // -6 a +6px
-    span.style.setProperty('--shift', shift+'px');
     span.style.left = shift+'px';
 
     displayed.push(span);
