@@ -15,7 +15,7 @@ body{
   overflow-x:hidden; min-height:100vh; color:#fff;
 }
 
-/* Corazones */
+/* Corazones flotando */
 .heart{position:fixed; bottom:-10px; font-size:20px; color:rgba(255,100,150,0.85); pointer-events:none; animation:floatUp linear infinite; z-index:1;}
 @keyframes floatUp{0%{transform:translateY(0) scale(0.8);opacity:0.9}100%{transform:translateY(-120vh) scale(1.6);opacity:0}}
 
@@ -39,13 +39,11 @@ body{
   opacity:0; transform:translateY(-20px) scale(0.5);
   transition:opacity 3s ease, transform 3s ease;
 }
-
 @keyframes glow{
   0%{text-shadow:0 0 2px #fff, 0 0 6px #ff9acb;}
   50%{text-shadow:0 0 6px #fff, 0 0 12px #ff4d7a;}
   100%{text-shadow:0 0 3px #fff, 0 0 8px #ff76a1;}
 }
-
 @keyframes floatHorizontal{
   0%{left:0px;}
   25%{left:4px;}
@@ -93,7 +91,7 @@ body{
   border-radius:28px; background:linear-gradient(90deg,#ff76a1,#ff4d7a);
   color:white; cursor:pointer; font-weight:700;
 }
-#btn-carta2 { display: none; } /* inicia oculto */
+#btn-carta2 { display: none; }
 
 /* Cartas */
 #carta,#carta2{
@@ -118,6 +116,12 @@ body{
   z-index:4;text-shadow:0 6px 20px rgba(255,0,120,0.07);
 }
 
+/* Fecha final */
+#fecha{
+  display:none; text-align:center; font-size:24px; font-weight:700;
+  color:#ff9acb; margin-top:12px;
+}
+
 /* Responsive */
 @media(max-width:520px){
   .foto-item{width:140px;height:140px;}
@@ -138,7 +142,7 @@ body{
 <div id="topWords" class="word-container"></div>
 <h1 class="titulo-type">Para ti mi amor</h1>
 
-<!-- Fotos iniciales desde el inicio -->
+<!-- Fotos iniciales -->
 <div class="photos-initial">
   <img src="tu2.jpg" alt="Foto 1">
   <img src="tu.jpg" alt="Foto 2">
@@ -168,9 +172,10 @@ body{
 </div>
 
 <div id="final-msg">Feliz cumpleaños, mi amor ❤️</div>
+<div id="fecha">💜 15.02.2025 💜</div>
 
 <script>
-// Palabras top con colores y efecto flotante
+// Palabras top
 const wordsTop=["hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa","tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora","fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"];
 const colors=["#ff4f4f","#ffd700","#6ab8ff","#ff7af6","#8aff91","#ffb347","#b28cff","#ffd1aa"];
 
@@ -260,13 +265,9 @@ function escribirCarta(){
     setTimeout(escribirCarta,32);
   } else {
     // Mostrar fotos + texto
-    const fotosSection = document.getElementById('fotos-section');
-    fotosSection.style.display='flex';
-
-    // Mostrar el segundo botón 1 segundo después
-    setTimeout(()=>{
-      document.getElementById('btn-carta2').style.display='block';
-    },1000);
+    document.getElementById('fotos-section').style.display='flex';
+    // Segundo botón 1 seg después
+    setTimeout(()=>{document.getElementById('btn-carta2').style.display='block';},1000);
   }
 }
 
@@ -299,29 +300,16 @@ function escribirCarta2(){
     setTimeout(escribirCarta2,32);
   }else{
     document.getElementById('final-msg').style.display='block';
-    // Mostrar fecha final
-    const fecha = document.createElement('div');
-    fecha.id = 'fecha-final';
-    fecha.textContent = '💜 15.02.2025 💜';
-    fecha.style.marginTop = '18px';
-    fecha.style.fontSize = '24px';
-    fecha.style.fontWeight = '700';
-    fecha.style.color = '#ff9acb';
-    fecha.style.textAlign = 'center';
-    document.body.appendChild(fecha);
+    setTimeout(()=>{
+      const fecha=document.getElementById('fecha');
+      fecha.style.display='block';
+    },500);
   }
 }
 
-// Audio autoplay
+// Música autoplay
 const audio=document.getElementById('bg-audio');
-audio.addEventListener('play',()=>{});
-audio.addEventListener('error',()=>{});
-setTimeout(()=>{
-  if(audio.paused){
-    audio.play().catch(()=>{});
-  }
-},500);
-
+audio.play().catch(()=>{});
 </script>
 </body>
 </html>
