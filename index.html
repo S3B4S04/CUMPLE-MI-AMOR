@@ -187,8 +187,7 @@ function animateWordsTop(list){
     container.appendChild(span);
     setTimeout(()=>span.classList.add('show'),50);
 
-    // desplazamiento horizontal aleatorio
-    const shift = Math.random()*12 - 6; // -6 a +6px
+    const shift = Math.random()*12 - 6;
     span.style.left = shift+'px';
 
     displayed.push(span);
@@ -259,9 +258,15 @@ function escribirCarta(){
     p.textContent+=cartaTexto.charAt(idx);
     idx++;
     setTimeout(escribirCarta,32);
-  }else{
-    document.getElementById('fotos-section').style.display='flex';
-    document.getElementById('btn-carta2').style.display='block';
+  } else {
+    // Mostrar fotos + texto
+    const fotosSection = document.getElementById('fotos-section');
+    fotosSection.style.display='flex';
+
+    // Mostrar el segundo botón **después de un pequeño delay**
+    setTimeout(()=>{
+      document.getElementById('btn-carta2').style.display='block';
+    },500);
   }
 }
 
