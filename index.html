@@ -55,10 +55,13 @@ body {
   opacity: 0;
   transform: scale(.8);
   display:inline-block;
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(.7); }
-  to   { opacity: 1; transform: scale(1); }
+
+/* palabra fade-out */
+.word.fade-out {
+  opacity: 0;
+  transform: scale(0.5);
 }
 
 /* TITULO con efecto máquina de escribir */
@@ -164,7 +167,7 @@ body {
 
 <div id="topWords" class="word-container"></div>
 <h1 class="titulo-type">Para ti mi amor</h1>
-<div id="bottomWords" class="word-container"></div>
+<div id="bottomWords" class="word-container" style="color:white;"></div>
 
 <button class="btn" onclick="mostrarCarta()">Te escribí algo...</button>
 
@@ -196,34 +199,43 @@ body {
 /* Palabras animadas */
 const wordsTop = ["hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa","tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora","fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"];
 const wordsBottom = ["Gracias","por","ser","tú","por","cuidarme","por","quererme","por","estar","conmigo","siempre","por","ser","tan","especial","para","mí","mi","amor","mi","hogar"];
-const colors = ["#ff4f4f", "#ffd700", "#6ab8ff", "#ff7af6", "#8aff91", "#ffb347", "#b28cff", "#ffd1aa"];
 
-function animateWords(list, containerId){
+function animateWordsSequential(list, containerId){
   const container = document.getElementById(containerId);
-  const delayPer = 220;
-  container.innerHTML = "";
-  list.forEach((w,i)=>{
-    const span = document.createElement('span');
-    span.className='word';
-    span.textContent=w;
-    span.style.color=colors[i % colors.length];
-    span.style.animation = `fadeIn 600ms ease forwards`;
-    span.style.animationDelay = `${i*delayPer}ms`;
-    container.appendChild(span);
-  });
-  return list.length*delayPer +1500;
+  container.innerHTML="";
+  let displayed = [];
+  let i=0;
+
+  function showNext(){
+    if(i<list.length){
+      const span = document.createElement('span');
+      span.className='word';
+      span.textContent = list[i];
+      if(containerId=="bottomWords") span.style.color="white";
+      container.appendChild(span);
+      displayed.push(span);
+      i++;
+
+      // Si ya hay 2 palabras nuevas, desvanecer la más antigua
+      if(displayed.length>2){
+        const toFade = displayed.shift();
+        toFade.classList.add('fade-out');
+        setTimeout(()=>toFade.remove(),800);
+      }
+
+      setTimeout(showNext,220);
+    }else{
+      // repetir después de 2s
+      setTimeout(()=>{
+        container.innerHTML="";
+        animateWordsSequential(list,containerId);
+      },2000);
+    }
+  }
+  showNext();
 }
-function runWordsLoop(){
-  const t1 = animateWords(wordsTop,"topWords");
-  const t2 = animateWords(wordsBottom,"bottomWords");
-  const cycle = Math.max(t1,t2)+1200;
-  setTimeout(()=>{
-    document.getElementById("topWords").innerHTML="";
-    document.getElementById("bottomWords").innerHTML="";
-    runWordsLoop();
-  },cycle);
-}
-runWordsLoop();
+animateWordsSequential(wordsTop,"topWords");
+animateWordsSequential(wordsBottom,"bottomWords");
 
 /* corazones */
 function crearCorazon(){
@@ -269,7 +281,6 @@ function escribirCarta(){
     idx++;
     setTimeout(escribirCarta,32);
   }else{
-    // Mostrar sección fotos
     document.getElementById('fotos-section').style.display='flex';
     document.getElementById('btn-carta2').style.display='block';
   }
