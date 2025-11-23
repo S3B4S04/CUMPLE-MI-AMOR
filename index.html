@@ -4,165 +4,91 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Para ti mi amor</title>
-
 <style>
-:root{
-  --accent: #ff4d7a;
-}
-*{box-sizing:border-box}
-body {
-  margin: 0;
-  padding: 0;
-  background: radial-gradient(#0b0210 0%, #000000 70%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  overflow-x: hidden;
-  min-height: 100vh;
-  color: #fff;
+:root{--accent:#ff4d7a;}
+*{box-sizing:border-box;}
+body{
+  margin:0; padding:0;
+  background:radial-gradient(#0b0210 0%,#000 70%);
+  display:flex; flex-direction:column; align-items:center;
+  font-family:Arial,sans-serif;
+  overflow-x:hidden; min-height:100vh; color:#fff;
 }
 
-/* corazones flotando (fondo) */
-.heart {
-  position: fixed;
-  bottom: -10px;
-  font-size: 20px;
-  color: rgba(255, 100, 150, 0.85);
-  pointer-events: none;
-  animation: floatUp linear infinite;
-  z-index: 1;
+/* Corazones */
+.heart{
+  position:fixed; bottom:-10px; font-size:20px;
+  color:rgba(255,100,150,0.85);
+  pointer-events:none; animation:floatUp linear infinite; z-index:1;
 }
-@keyframes floatUp {
-  0%   { transform: translateY(0) scale(0.8); opacity: 0.9; }
-  100% { transform: translateY(-120vh) scale(1.6); opacity: 0; }
-}
+@keyframes floatUp{0%{transform:translateY(0) scale(0.8);opacity:0.9}100%{transform:translateY(-120vh) scale(1.6);opacity:0}}
 
-/* contenedores de palabras */
-.word-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  padding: 12px 16px;
-  gap: 10px;
-  z-index: 4;
-  pointer-events: none;
+/* Palabras */
+.word-container{
+  display:flex; flex-wrap:wrap; justify-content:center;
+  width:100%; padding:12px 16px; gap:10px; z-index:4; pointer-events:none;
 }
-.word {
-  font-size: 28px;
-  font-weight: 700;
-  opacity: 0;
-  transform: scale(.8);
-  display:inline-block;
-  transition: opacity 0.8s ease, transform 0.8s ease;
+.word{
+  font-size:28px; font-weight:700; opacity:0; transform:scale(.8);
+  display:inline-block; transition:opacity 0.8s ease, transform 0.8s ease;
 }
+.word.fade-out{opacity:0; transform:scale(0.5);}
 
-/* palabra fade-out */
-.word.fade-out {
-  opacity: 0;
-  transform: scale(0.5);
+/* Titulo */
+.titulo-type{
+  font-size:clamp(32px,6.5vw,60px);
+  color:var(--accent); white-space:nowrap;
+  border-right:3px solid var(--accent); width:18ch;
+  overflow:hidden; margin:8px auto; font-weight:800;
+  text-align:center; z-index:4;
+  animation:typing 3.2s steps(18,end), blink .7s infinite;
 }
+@keyframes typing{from{width:0}}
+@keyframes blink{50%{border-color:transparent}}
 
-/* TITULO con efecto máquina de escribir */
-.titulo-type {
-  font-size: clamp(32px, 6.5vw, 60px);
-  color: var(--accent);
-  white-space: nowrap;
-  border-right: 3px solid var(--accent);
-  width: 18ch;
-  overflow: hidden;
-  margin: 8px auto;
-  font-weight: 800;
-  text-align: center;
-  z-index: 4;
-  animation: typing 3.2s steps(18, end), blink .7s infinite;
-}
-@keyframes typing { from { width: 0 } }
-@keyframes blink { 50% { border-color: transparent } }
-
-/* fotos después de la carta */
-#fotos-section{
-  display:none;
-  flex-direction: column;
-  align-items:center;
-  margin-top:24px;
-}
-#fotos-section h2{
-  font-size:28px;
-  margin-bottom:16px;
-  color: #ff9acb;
-}
+/* Fotos después de carta */
+#fotos-section{display:none; flex-direction:column; align-items:center; margin-top:24px;}
+#fotos-section h2{font-size:28px; margin-bottom:16px; color:#ff9acb;}
 .foto-item{
-  width:180px;
-  height:180px;
-  border-radius:16px;
-  object-fit:cover;
-  margin:8px 0;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  width:180px; height:180px; border-radius:16px;
+  object-fit:cover; margin:8px 0;
+  box-shadow:0 8px 20px rgba(0,0,0,0.5);
   transition: transform .35s ease, box-shadow .35s ease;
 }
-.foto-item:hover{
-  transform: scale(1.05);
-  box-shadow: 0 12px 28px rgba(255,80,140,0.4);
+.foto-item:hover{transform:scale(1.05); box-shadow:0 12px 28px rgba(255,80,140,0.4);}
+
+/* Botón segunda carta */
+#btn-carta2{display:none;margin-top:18px;padding:12px 26px;font-size:18px;border:none;border-radius:28px;background:linear-gradient(90deg,#ff76a1,#ff4d7a);color:white;cursor:pointer;font-weight:700;}
+
+/* Cartas */
+#carta,#carta2{
+  display:none; margin-top:28px; color:#fff;
+  width:92%; max-width:820px; font-size:18px; line-height:1.7;
+  text-align:center; z-index:4;
+  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  padding:24px; border-radius:12px; border:1px solid rgba(255,255,255,0.04);
 }
 
-/* botón carta segunda */
-#btn-carta2{
-  display:none;
-  margin-top:18px;
-  padding: 12px 26px;
-  font-size: 18px;
-  border: none;
-  border-radius: 28px;
-  background: linear-gradient(90deg,#ff76a1,#ff4d7a);
-  color: white;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-/* carta */
-#carta, #carta2 {
-  display: none;
-  margin-top: 28px;
-  color: #fff;
-  width: 92%;
-  max-width: 820px;
-  font-size: 18px;
-  line-height: 1.7;
-  text-align: center;
-  z-index: 4;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-  padding: 24px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-
-/* mensaje final */
+/* Mensaje final */
 #final-msg{
-  margin-top: 18px;
-  font-size: 34px;
-  font-weight: 800;
-  color: #ff9acb;
-  text-align: center;
-  display: none;
-  z-index: 4;
-  text-shadow: 0 6px 20px rgba(255,0,120,0.07);
+  margin-top:18px;font-size:34px;font-weight:800;
+  color:#ff9acb;text-align:center;display:none;
+  z-index:4;text-shadow:0 6px 20px rgba(255,0,120,0.07);
 }
 
-/* responsive */
-@media (max-width:520px){
-  .foto-item{ width: 140px; height:140px; }
-  #fotos-section h2{ font-size:22px; }
-  .word{ font-size:18px }
-  .titulo-type{ font-size:34px }
+/* Responsive */
+@media(max-width:520px){
+  .foto-item{width:140px;height:140px;}
+  #fotos-section h2{font-size:22px;}
+  .word{font-size:18px;}
+  .titulo-type{font-size:34px;}
 }
 </style>
 </head>
 <body>
 
 <audio id="bg-audio" autoplay loop>
-  <source src="musica.mp3" type="audio/mpeg" />
+  <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <div id="topWords" class="word-container"></div>
@@ -175,7 +101,6 @@ body {
   <p id="textoCarta"></p>
 </div>
 
-<!-- Sección fotos y texto después de la primera carta -->
 <div id="fotos-section">
   <h2>Nuestros momentos juntos</h2>
   <img src="foto1.jpg" class="foto-item" style="align-self:flex-start;">
@@ -184,64 +109,53 @@ body {
   <img src="foto4.jpg" class="foto-item" style="align-self:flex-end;">
 </div>
 
-<!-- botón segunda carta -->
 <button id="btn-carta2" onclick="mostrarCarta2()">Ups, acá también te escribí algo…</button>
 
-<!-- segunda carta -->
 <div id="carta2" role="article" aria-live="polite">
   <p id="textoCarta2"></p>
 </div>
 
-<!-- mensaje final -->
 <div id="final-msg">Feliz cumpleaños, mi amor ❤️</div>
 
 <script>
-/* Palabras animadas */
-const wordsTop = ["hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa","tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora","fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"];
-const wordsBottom = ["Gracias","por","ser","tú","por","cuidarme","por","quererme","por","estar","conmigo","siempre","por","ser","tan","especial","para","mí","mi","amor","mi","hogar"];
+const wordsTop=["hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa","tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora","fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"];
+const wordsBottom=["Gracias","por","ser","tú","por","cuidarme","por","quererme","por","estar","conmigo","siempre","por","ser","tan","especial","para","mí","mi","amor","mi","hogar"];
 
-function animateWordsSequential(list, containerId){
-  const container = document.getElementById(containerId);
+// Animación palabras superiores con fade-out
+function animateWordsSequential(list,containerId){
+  const container=document.getElementById(containerId);
   container.innerHTML="";
-  let displayed = [];
+  let displayed=[];
   let i=0;
-
   function showNext(){
     if(i<list.length){
-      const span = document.createElement('span');
+      const span=document.createElement('span');
       span.className='word';
-      span.textContent = list[i];
-      if(containerId=="bottomWords") span.style.color="white";
+      span.textContent=list[i];
+      if(containerId==="bottomWords") span.style.color="white";
       container.appendChild(span);
       displayed.push(span);
       i++;
-
-      // Si ya hay 2 palabras nuevas, desvanecer la más antigua
       if(displayed.length>2){
-        const toFade = displayed.shift();
+        const toFade=displayed.shift();
         toFade.classList.add('fade-out');
         setTimeout(()=>toFade.remove(),800);
       }
-
       setTimeout(showNext,220);
     }else{
-      // repetir después de 2s
-      setTimeout(()=>{
-        container.innerHTML="";
-        animateWordsSequential(list,containerId);
-      },2000);
+      setTimeout(()=>animateWordsSequential(list,containerId),2000);
     }
   }
   showNext();
 }
+
 animateWordsSequential(wordsTop,"topWords");
 animateWordsSequential(wordsBottom,"bottomWords");
 
-/* corazones */
+/* Corazones */
 function crearCorazon(){
   const heart=document.createElement('div');
-  heart.className='heart';
-  heart.textContent='❤';
+  heart.className='heart'; heart.textContent='❤';
   heart.style.left=Math.random()*100+'vw';
   heart.style.fontSize=(14+Math.random()*28)+'px';
   heart.style.animationDuration=(6+Math.random()*7)+'s';
@@ -251,7 +165,7 @@ function crearCorazon(){
 setInterval(crearCorazon,700);
 
 /* Primera carta */
-const cartaTexto = `Mi amor…
+const cartaTexto=`Mi amor…
 
 Hoy es tu cumpleaños y aunque no pueda estar físicamente a tu lado, quiero que sientas que este rincón late por ti.
 
@@ -270,8 +184,7 @@ let idx=0;
 function mostrarCarta(){
   const cartaEl=document.getElementById('carta');
   cartaEl.style.display='block';
-  cartaEl.setAttribute('tabindex','-1');
-  cartaEl.focus();
+  cartaEl.setAttribute('tabindex','-1'); cartaEl.focus();
   escribirCarta();
 }
 function escribirCarta(){
@@ -305,8 +218,7 @@ let idx2=0;
 function mostrarCarta2(){
   const carta2El=document.getElementById('carta2');
   carta2El.style.display='block';
-  carta2El.setAttribute('tabindex','-1');
-  carta2El.focus();
+  carta2El.setAttribute('tabindex','-1'); carta2El.focus();
   escribirCarta2();
 }
 function escribirCarta2(){
@@ -320,7 +232,7 @@ function escribirCarta2(){
   }
 }
 
-/* Audio control */
+/* Audio */
 const audio=document.getElementById('bg-audio');
 audio.addEventListener('play',()=>{});
 audio.addEventListener('error',()=>{});
@@ -328,9 +240,7 @@ setTimeout(()=>{
   if(audio.paused){
     const p=document.createElement('div');
     p.style.position='fixed';
-    p.style.right='18px';
-    p.style.bottom='18px';
-    p.style.zIndex='6';
+    p.style.right='18px'; p.style.bottom='18px'; p.style.zIndex='6';
     p.innerHTML='<button style="padding:10px 14px;border-radius:14px;border:none;background:linear-gradient(90deg,#ff76a1,#ff4d7a);color:#fff;font-weight:700;">Reproducir música</button>';
     document.body.appendChild(p);
     p.querySelector('button').onclick=()=>{audio.play().catch(()=>{});p.remove();}
