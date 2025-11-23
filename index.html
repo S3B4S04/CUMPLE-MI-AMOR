@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Para ti mi amor</title>
+
+<style>
+  :root{
+    --accent: #ff4d7a;
+  }
+
+  *{box-sizing:border-box}
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(#0b0210 0%, #000000 70%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    color: #fff;
+  }
+
+  /* corazones flotando (fondo) */
+  .heart {
+    position: fixed;
+    bottom: -10px;
+    font-size: 20px;
+    color: rgba(255, 100, 150, 0.85);
+    pointer-events: none;
+    animation: floatUp linear infinite;
+    z-index: 1;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) scale(0.8); opacity: 0.9; }
+    100% { transform: translateY(-120vh) scale(1.6); opacity: 0; }
+  }
+
+  /* contenedores de palabras */
+  .word-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 16px;
+    gap: 10px;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .word {
+    font-size: 28px;
+    font-weight: 700;
+    opacity: 0;
+    transform: scale(.8);
+    display:inline-block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(.7); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* TITULO con efecto máquina de escribir */
+  .titulo-type {
+    font-size: clamp(32px, 6.5vw, 60px);
+    color: var(--accent);
+    white-space: nowrap;
+    border-right: 3px solid var(--accent);
+    width: 18ch;            /* ajusta al texto */
+    overflow: hidden;
+    margin: 8px auto;
+    font-weight: 800;
+    text-align: center;
+    z-index: 4;
+    animation: typing 3.2s steps(18, end), blink .7s infinite;
+  }
+  @keyframes typing { from { width: 0 } }
+  @keyframes blink { 50% { border-color: transparent } }
+
+  /* fotos lado a lado (ajustable en móvil) */
+  .photos {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    z-index: 4;
+    align-items:center;
+    justify-content:center;
+    width: 100%;
+    padding: 8px;
+  }
+  .photos img {
+    width: calc(48vw - 24px);
+    max-width: 420px;
+    height: auto;
+    border-radius: 16px;
+    object-fit: cover;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    border: 4px solid rgba(255,255,255,0.06);
+  }
+
+  /* botón */
+  .btn {
+    margin-top: 20px;
+    padding: 12px 26px;
+    font-size: 18px;
+    border: none;
+    border-radius: 28px;
+    background: linear-gradient(90deg,#ff76a1,#ff4d7a);
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    z-index: 4;
+    box-shadow: 0 8px 20px rgba(255,77,122,0.18);
+  }
+
+  /* carta */
+  #carta {
+    display: none;
+    margin-top: 28px;
+    color: #fff;
+    width: 92%;
+    max-width: 820px;
+    font-size: 18px;
+    line-height: 1.7;
+    text-align: center;
+    z-index: 4;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  #final-msg {
+    margin-top: 18px;
+    font-size: 34px;
+    font-weight: 800;
+    color: #ff9acb;
+    text-align: center;
+    display: none;
+    z-index: 4;
+    text-shadow: 0 6px 20px rgba(255,0,120,0.07);
+  }
+
+  /* responsive */
+  @media (max-width:820px){
+    .photos img { width: 42vw; max-width: 320px; }
+    .word { font-size: 20px; }
+    .titulo-type{ width: 14ch; animation-duration: 2.6s; }
+  }
+  @media (max-width:520px){
+    .photos{ flex-direction: column; gap: 14px; }
+    .photos img{ width: 86vw; max-width: 420px; }
+    .word{ font-size: 18px }
+    .titulo-type{ font-size: 34px }
+  }
+</style>
+</head>
+<body>
+
+<!-- audio: pon musica.mp3 en el mismo folder -->
+<audio id="bg-audio" autoplay loop>
+  <source src="musica.mp3" type="audio/mpeg" />
+  <!-- si no carga el autoplay, el usuario puede darle play -->
+</audio>
+
+<!-- palabras arriba -->
+<div id="topWords" class="word-container"></div>
+
+<!-- titulo con efecto -->
+<h1 class="titulo-type">Para ti mi amor</h1>
+
+<!-- fotos: izquierda tu2.jpg, derecha tu.jpg -->
+<div class="photos" aria-hidden="true">
+  <img src="tu2.jpg" alt="Foto izquierda">
+  <img src="tu.jpg"  alt="Foto derecha">
+</div>
+
+<!-- palabras abajo -->
+<div id="bottomWords" class="word-container"></div>
+
+<!-- botón para carta -->
+<button class="btn" onclick="mostrarCarta()">Leer mi carta para ti</button>
+
+<!-- carta -->
+<div id="carta" role="article" aria-live="polite">
+  <p id="textoCarta"></p>
+</div>
+
+<!-- mensaje final -->
+<div id="final-msg">Feliz cumpleaños, mi amor ❤️</div>
+
+<script>
+/* LISTAS DE PALABRAS (más de 20) */
+const wordsTop = [
+  "hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa",
+  "tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora",
+  "fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"
+];
+
+const wordsBottom = [
+  "Gracias","por","ser","tú","por","cuidarme","por","quererme","por","estar","conmigo",
+  "siempre","por","ser","tan","especial","para","mí","mi","amor","mi","hogar"
+];
+
+const colors = ["#ff4f4f", "#ffd700", "#6ab8ff", "#ff7af6", "#8aff91", "#ffb347", "#b28cff", "#ffd1aa"];
+
+/* FUNCION: mostrar palabras (aparecen 1 vez y luego se repiten) */
+function animateWords(list, containerId){
+  const container = document.getElementById(containerId);
+  const delayPer = 220; // ms por palabra
+  container.innerHTML = ""; // limpiar
+
+  list.forEach((w,i) => {
+    const span = document.createElement('span');
+    span.className = 'word';
+    span.textContent = w;
+    span.style.color = colors[i % colors.length];
+    span.style.animation = `fadeIn 600ms ease forwards`;
+    span.style.animationDelay = `${i * delayPer}ms`;
+    container.appendChild(span);
+  });
+
+  // Después de una ronda completa, repetir todo (opcional)
+  const totalTime = list.length * delayPer + 1500;
+  return totalTime;
+}
+
+function runWordsLoop(){
+  const t1 = animateWords(wordsTop, "topWords");
+  const t2 = animateWords(wordsBottom, "bottomWords");
+  const cycle = Math.max(t1,t2) + 1200;
+  // borrar y volver a lanzar en ciclo (esto cumple "aparecen 1 vez luego se repiten")
+  setTimeout(() => {
+    // quitar palabras actuales (las animaciones ya terminaron)
+    document.getElementById("topWords").innerHTML = "";
+    document.getElementById("bottomWords").innerHTML = "";
+    // volver a ejecutar
+    runWordsLoop();
+  }, cycle);
+}
+// iniciar bucle
+runWordsLoop();
+
+/* Corazones fondo - si satura, cambia setInterval a más grande o coméntalo */
+function crearCorazon(){
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.textContent = '❤';
+  heart.style.left = Math.random()*100 + 'vw';
+  heart.style.fontSize = (14 + Math.random()*28) + 'px';
+  heart.style.animationDuration = (6 + Math.random()*7) + 's';
+  document.body.appendChild(heart);
+  setTimeout(()=> heart.remove(), 11000);
+}
+// crear corazones de forma moderada
+const heartInterval = setInterval(crearCorazon, 700);
+
+/* CARTA: escritura automática y promesa "día que ella escoja con permiso" */
+const cartaTexto = `
+Mi amor…
+
+Hoy es tu cumpleaños y aunque no pueda estar físicamente a tu lado, quiero que sientas que este rincón late por ti.
+
+Estos nueve meses han sido un viaje hermoso: risas, pequeñas peleas que se olvidán al instante, confidencias en la madrugada y una calma que solo existe contigo. Me das paz y me empujas a ser mejor.
+
+Me encanta cada detalle tuyo: cómo frunces el ceño cuando piensas, cómo sonríes con los ojos, la forma en que haces pequeño lo grande.
+
+Quiero proponerte algo: escoge tú el día.  
+El día que quieras, cuando tengas permiso y tiempo, cuando no haya prisas y puedas disfrutar.  
+Ese día será todo para ti: mi abrazo, mi tiempo, y la tranquilidad de celebrar como te mereces.
+
+Te quiero más de lo que estas palabras alcanzan a decir.
+`;
+
+let idx = 0;
+let typingTimeout = null;
+
+function mostrarCarta(){
+  // mostrar carta y comenzar escritura
+  const cartaEl = document.getElementById('carta');
+  cartaEl.style.display = 'block';
+  // llevar foco para accesibilidad
+  cartaEl.setAttribute('tabindex','-1');
+  cartaEl.focus();
+  escribirCarta();
+}
+
+function escribirCarta(){
+  const p = document.getElementById('textoCarta');
+  if(idx < cartaTexto.length){
+    p.textContent += cartaTexto.charAt(idx);
+    idx++;
+    typingTimeout = setTimeout(escribirCarta, 32);
+  } else {
+    // una vez terminada la carta mostrar mensaje final
+    setTimeout(()=>{
+      document.getElementById('final-msg').style.display = 'block';
+    },700);
+  }
+}
+
+/* CONTROL de audio (algunos navegadores bloquean autoplay) */
+const audio = document.getElementById('bg-audio');
+// Si autoplay fue bloqueado, mostramos un botón temporal para play
+audio.addEventListener('play', ()=>{/* ok */});
+audio.addEventListener('error', ()=>{/* no pasa nada */});
+
+// Si el autoplay fue bloqueado, crea un pequeño control para el usuario
+setTimeout(()=>{
+  if(audio.paused){
+    const p = document.createElement('div');
+    p.style.position='fixed';
+    p.style.right='18px';
+    p.style.bottom='18px';
+    p.style.zIndex='6';
+    p.innerHTML = '<button style=\"padding:10px 14px;border-radius:14px;border:none;background:linear-gradient(90deg,#ff76a1,#ff4d7a);color:#fff;font-weight:700;\">Reproducir música</button>';
+    document.body.appendChild(p);
+    p.querySelector('button').onclick = ()=>{
+      audio.play().catch(()=>{});
+      p.remove();
+    }
+  }
+},800);
+
+/* si quieres detener los corazones (si satura), llama clearInterval(heartInterval) */
+</script>
+
+</body>
+</html>
