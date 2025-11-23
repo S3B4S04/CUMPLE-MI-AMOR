@@ -23,16 +23,23 @@ body{
 }
 @keyframes floatUp{0%{transform:translateY(0) scale(0.8);opacity:0.9}100%{transform:translateY(-120vh) scale(1.6);opacity:0}}
 
-/* Palabras */
+/* Palabras top */
 .word-container{
   display:flex; flex-wrap:wrap; justify-content:center;
   width:100%; padding:12px 16px; gap:10px; z-index:4; pointer-events:none;
 }
 .word{
-  font-size:28px; font-weight:700; opacity:0; transform:scale(.8);
-  display:inline-block; transition:opacity 0.8s ease, transform 0.8s ease;
+  font-size:28px; font-weight:700; opacity:0;
+  display:inline-block; transform:translateY(20px) scale(0.8);
+  transition:opacity 0.8s ease, transform 0.8s ease;
 }
-.word.fade-out{opacity:0; transform:scale(0.5);}
+.word.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.word.fade-out{
+  opacity:0; transform:translateY(-20px) scale(0.5);
+}
 
 /* Titulo */
 .titulo-type{
@@ -69,6 +76,9 @@ body{
   padding:24px; border-radius:12px; border:1px solid rgba(255,255,255,0.04);
 }
 
+/* Texto bottom fijo blanco */
+#bottomWords{color:white;}
+
 /* Mensaje final */
 #final-msg{
   margin-top:18px;font-size:34px;font-weight:800;
@@ -93,7 +103,7 @@ body{
 
 <div id="topWords" class="word-container"></div>
 <h1 class="titulo-type">Para ti mi amor</h1>
-<div id="bottomWords" class="word-container" style="color:white;"></div>
+<div id="bottomWords" class="word-container"></div>
 
 <button class="btn" onclick="mostrarCarta()">Te escribí algo...</button>
 
@@ -118,12 +128,13 @@ body{
 <div id="final-msg">Feliz cumpleaños, mi amor ❤️</div>
 
 <script>
+// Palabras
 const wordsTop=["hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa","tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora","fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"];
 const wordsBottom=["Gracias","por","ser","tú","por","cuidarme","por","quererme","por","estar","conmigo","siempre","por","ser","tan","especial","para","mí","mi","amor","mi","hogar"];
 
-// Animación palabras superiores con fade-out
-function animateWordsSequential(list,containerId){
-  const container=document.getElementById(containerId);
+// Animación top words con efecto flotante y desvanecimiento
+function animateWordsTop(list){
+  const container=document.getElementById("topWords");
   container.innerHTML="";
   let displayed=[];
   let i=0;
@@ -132,27 +143,38 @@ function animateWordsSequential(list,containerId){
       const span=document.createElement('span');
       span.className='word';
       span.textContent=list[i];
-      if(containerId==="bottomWords") span.style.color="white";
       container.appendChild(span);
+      setTimeout(()=>span.classList.add('show'),50);
       displayed.push(span);
       i++;
       if(displayed.length>2){
-        const toFade=displayed.shift();
-        toFade.classList.add('fade-out');
-        setTimeout(()=>toFade.remove(),800);
+        const old=displayed.shift();
+        old.classList.remove('show');
+        old.classList.add('fade-out');
+        setTimeout(()=>old.remove(),800);
       }
       setTimeout(showNext,220);
     }else{
-      setTimeout(()=>animateWordsSequential(list,containerId),2000);
+      setTimeout(()=>animateWordsTop(list),2000);
     }
   }
   showNext();
 }
+animateWordsTop(wordsTop);
 
-animateWordsSequential(wordsTop,"topWords");
-animateWordsSequential(wordsBottom,"bottomWords");
+// Texto bottom fijo blanco
+function animateWordsBottom(list){
+  const container=document.getElementById("bottomWords");
+  container.innerHTML="";
+  list.forEach(w=>{
+    const span=document.createElement('span');
+    span.textContent=w + " ";
+    container.appendChild(span);
+  });
+}
+animateWordsBottom(wordsBottom);
 
-/* Corazones */
+// Corazones
 function crearCorazon(){
   const heart=document.createElement('div');
   heart.className='heart'; heart.textContent='❤';
@@ -164,7 +186,7 @@ function crearCorazon(){
 }
 setInterval(crearCorazon,700);
 
-/* Primera carta */
+// Primera carta
 const cartaTexto=`Mi amor…
 
 Hoy es tu cumpleaños y aunque no pueda estar físicamente a tu lado, quiero que sientas que este rincón late por ti.
@@ -179,7 +201,6 @@ Ese día será todo para ti: mi abrazo, mi tiempo, y la tranquilidad de celebrar
 
 Te amo demaciado más de lo que estas palabras alcanzan a decir.
 `;
-
 let idx=0;
 function mostrarCarta(){
   const cartaEl=document.getElementById('carta');
@@ -199,7 +220,7 @@ function escribirCarta(){
   }
 }
 
-/* Segunda carta */
+// Segunda carta
 const carta2Texto=`Mi vida… 
 
 Cada día que pasa descubro algo nuevo de ti que me hace enamorarme aún más. 
@@ -213,7 +234,6 @@ Contigo, todo parece posible y cada momento es único.
 Deseo que siempre recuerdes lo mucho que te amo, que cada día a tu lado es un regalo, 
 y que mi corazón late por ti hoy y siempre. ❤️
 `;
-
 let idx2=0;
 function mostrarCarta2(){
   const carta2El=document.getElementById('carta2');
@@ -232,7 +252,7 @@ function escribirCarta2(){
   }
 }
 
-/* Audio */
+// Audio
 const audio=document.getElementById('bg-audio');
 audio.addEventListener('play',()=>{});
 audio.addEventListener('error',()=>{});
