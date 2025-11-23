@@ -263,10 +263,10 @@ function escribirCarta(){
     const fotosSection = document.getElementById('fotos-section');
     fotosSection.style.display='flex';
 
-    // Mostrar el segundo botón **después de un pequeño delay**
+    // Mostrar el segundo botón **después de 1 segundo de que aparezcan fotos**
     setTimeout(()=>{
       document.getElementById('btn-carta2').style.display='block';
-    },500);
+    },1000);
   }
 }
 
