@@ -27,7 +27,7 @@ body{
 .word{
   font-size:28px; font-weight:700; opacity:0;
   display:inline-block; transform:translateY(20px) scale(0.8);
-  transition:opacity 3s ease, transform 3s ease, left 3s ease;
+  transition:opacity 3s ease, transform 3s ease, text-shadow 3s ease, left 3s ease;
   position:relative;
 }
 .word.show{
@@ -93,7 +93,7 @@ body{
   border-radius:28px; background:linear-gradient(90deg,#ff76a1,#ff4d7a);
   color:white; cursor:pointer; font-weight:700;
 }
-#btn-carta2 { display: none; }
+#btn-carta2 { display: none; } /* inicia oculto */
 
 /* Cartas */
 #carta,#carta2{
@@ -118,13 +118,6 @@ body{
   z-index:4;text-shadow:0 6px 20px rgba(255,0,120,0.07);
 }
 
-/* Texto final de fecha */
-#fecha-final{
-  margin-top:18px;font-size:24px;font-weight:700;
-  color:#ff9acb;text-align:center;
-  z-index:4;
-}
-
 /* Responsive */
 @media(max-width:520px){
   .foto-item{width:140px;height:140px;}
@@ -138,14 +131,14 @@ body{
 </head>
 <body>
 
-<audio id="bg-audio" loop>
+<audio id="bg-audio" autoplay loop>
   <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <div id="topWords" class="word-container"></div>
 <h1 class="titulo-type">Para ti mi amor</h1>
 
-<!-- Fotos iniciales -->
+<!-- Fotos iniciales desde el inicio -->
 <div class="photos-initial">
   <img src="tu2.jpg" alt="Foto 1">
   <img src="tu.jpg" alt="Foto 2">
@@ -175,7 +168,6 @@ body{
 </div>
 
 <div id="final-msg">Feliz cumpleaños, mi amor ❤️</div>
-<div id="fecha-final">💜 15.02.2025 💜</div>
 
 <script>
 // Palabras top con colores y efecto flotante
@@ -271,7 +263,7 @@ function escribirCarta(){
     const fotosSection = document.getElementById('fotos-section');
     fotosSection.style.display='flex';
 
-    // Mostrar el segundo botón después de 1 seg
+    // Mostrar el segundo botón 1 segundo después
     setTimeout(()=>{
       document.getElementById('btn-carta2').style.display='block';
     },1000);
@@ -307,28 +299,29 @@ function escribirCarta2(){
     setTimeout(escribirCarta2,32);
   }else{
     document.getElementById('final-msg').style.display='block';
+    // Mostrar fecha final
+    const fecha = document.createElement('div');
+    fecha.id = 'fecha-final';
+    fecha.textContent = '💜 15.02.2025 💜';
+    fecha.style.marginTop = '18px';
+    fecha.style.fontSize = '24px';
+    fecha.style.fontWeight = '700';
+    fecha.style.color = '#ff9acb';
+    fecha.style.textAlign = 'center';
+    document.body.appendChild(fecha);
   }
 }
 
-// Música autoplay
-window.addEventListener('load', () => {
-  const audio = document.getElementById('bg-audio');
-  audio.play().catch(() => {
-    // Mostrar botón de play si navegador bloquea autoplay
-    const btnPlay = document.createElement('button');
-    btnPlay.textContent = "🎵 Reproducir música";
-    btnPlay.style.position = "fixed";
-    btnPlay.style.top = "18px";
-    btnPlay.style.right = "18px";
-    btnPlay.style.padding = "10px 14px";
-    btnPlay.style.borderRadius = "14px";
-    btnPlay.style.zIndex = "10";
-    btnPlay.style.cursor = "pointer";
-    btnPlay.onclick = () => { audio.play(); btnPlay.remove(); };
-    document.body.appendChild(btnPlay);
-  });
-});
-</script>
+// Audio autoplay
+const audio=document.getElementById('bg-audio');
+audio.addEventListener('play',()=>{});
+audio.addEventListener('error',()=>{});
+setTimeout(()=>{
+  if(audio.paused){
+    audio.play().catch(()=>{});
+  }
+},500);
 
+</script>
 </body>
 </html>
