@@ -117,7 +117,7 @@
   }
 
   /* carta */
-  #carta {
+  #carta, #carta2 {
     display: none;
     margin-top: 28px;
     color: #fff;
@@ -186,7 +186,6 @@
 <!-- audio: pon musica.mp3 en el mismo folder -->
 <audio id="bg-audio" autoplay loop>
   <source src="musica.mp3" type="audio/mpeg" />
-  <!-- si no carga el autoplay, el usuario puede darle play -->
 </audio>
 
 <!-- palabras arriba -->
@@ -207,12 +206,12 @@
 <!-- botón para carta -->
 <button class="btn" onclick="mostrarCarta()">Te escribí algo...</button>
 
-<!-- carta -->
+<!-- primera carta -->
 <div id="carta" role="article" aria-live="polite">
   <p id="textoCarta"></p>
 </div>
 
-<!-- Fotos después de la carta -->
+<!-- Fotos después de la primera carta -->
 <div class="photos fotos-despues">
   <img src="foto1.jpg" class="foto-efecto">
   <img src="foto2.jpg" class="foto-efecto">
@@ -220,30 +219,31 @@
   <img src="foto4.jpg" class="foto-efecto">
 </div>
 
+<!-- segunda carta después de las fotos -->
+<div id="carta2" role="article" aria-live="polite">
+  <p id="textoCarta2"></p>
+</div>
+
 <!-- mensaje final -->
 <div id="final-msg">Feliz cumpleaños, mi amor ❤️</div>
 
 <script>
-/* LISTAS DE PALABRAS (más de 20) */
+/* LISTAS DE PALABRAS */
 const wordsTop = [
   "hermosa","única","bella","increíble","inteligente","especial","mágica","maravillosa",
   "tierna","valiente","brillante","dulce","radiante","adorable","auténtica","soñadora",
   "fuerte","perfecta","encantadora","preciosa","luminosa","inolvidable","cariñosa","leal"
 ];
-
 const wordsBottom = [
   "Gracias","por","ser","tú","por","cuidarme","por","quererme","por","estar","conmigo",
   "siempre","por","ser","tan","especial","para","mí","mi","amor","mi","hogar"
 ];
-
 const colors = ["#ff4f4f", "#ffd700", "#6ab8ff", "#ff7af6", "#8aff91", "#ffb347", "#b28cff", "#ffd1aa"];
 
-/* FUNCION: mostrar palabras (aparecen 1 vez y luego se repiten) */
 function animateWords(list, containerId){
   const container = document.getElementById(containerId);
-  const delayPer = 220; // ms por palabra
-  container.innerHTML = ""; // limpiar
-
+  const delayPer = 220;
+  container.innerHTML = "";
   list.forEach((w,i) => {
     const span = document.createElement('span');
     span.className = 'word';
@@ -253,29 +253,22 @@ function animateWords(list, containerId){
     span.style.animationDelay = `${i * delayPer}ms`;
     container.appendChild(span);
   });
-
-  // Después de una ronda completa, repetir todo (opcional)
   const totalTime = list.length * delayPer + 1500;
   return totalTime;
 }
-
 function runWordsLoop(){
   const t1 = animateWords(wordsTop, "topWords");
   const t2 = animateWords(wordsBottom, "bottomWords");
   const cycle = Math.max(t1,t2) + 1200;
-  // borrar y volver a lanzar en ciclo (esto cumple "aparecen 1 vez luego se repiten")
   setTimeout(() => {
-    // quitar palabras actuales (las animaciones ya terminaron)
     document.getElementById("topWords").innerHTML = "";
     document.getElementById("bottomWords").innerHTML = "";
-    // volver a ejecutar
     runWordsLoop();
   }, cycle);
 }
-// iniciar bucle
 runWordsLoop();
 
-/* Corazones fondo - si satura, cambia setInterval a más grande o coméntalo */
+/* Corazones fondo */
 function crearCorazon(){
   const heart = document.createElement('div');
   heart.className = 'heart';
@@ -286,10 +279,9 @@ function crearCorazon(){
   document.body.appendChild(heart);
   setTimeout(()=> heart.remove(), 11000);
 }
-// crear corazones de forma moderada
 const heartInterval = setInterval(crearCorazon, 700);
 
-/* CARTA: escritura automática y promesa "día que ella escoja con permiso" */
+/* PRIMERA CARTA */
 const cartaTexto = `
 Mi amor…
 
@@ -310,10 +302,8 @@ let idx = 0;
 let typingTimeout = null;
 
 function mostrarCarta(){
-  // mostrar carta y comenzar escritura
   const cartaEl = document.getElementById('carta');
   cartaEl.style.display = 'block';
-  // llevar foco para accesibilidad
   cartaEl.setAttribute('tabindex','-1');
   cartaEl.focus();
   escribirCarta();
@@ -326,20 +316,53 @@ function escribirCarta(){
     idx++;
     typingTimeout = setTimeout(escribirCarta, 32);
   } else {
-    // una vez terminada la carta mostrar mensaje final
     setTimeout(()=>{
       document.getElementById('final-msg').style.display = 'block';
+      mostrarCarta2(); // dispara la segunda carta
     },700);
   }
 }
 
-/* CONTROL de audio (algunos navegadores bloquean autoplay) */
-const audio = document.getElementById('bg-audio');
-// Si autoplay fue bloqueado, mostramos un botón temporal para play
-audio.addEventListener('play', ()=>{/* ok */});
-audio.addEventListener('error', ()=>{/* no pasa nada */});
+/* SEGUNDA CARTA */
+const carta2Texto = `
+Mi vida… 
 
-// Si el autoplay fue bloqueado, crea un pequeño control para el usuario
+Cada día que pasa descubro algo nuevo de ti que me hace enamorarme aún más. 
+Tu risa ilumina mis días, tu mirada calma mis tormentas, y tus abrazos son mi refugio. 
+No hay palabras suficientes para describir lo afortunado que me siento de tenerte en mi vida.
+
+Quiero que sepas que cada detalle, cada instante contigo, se queda grabado en mi corazón. 
+Eres mi inspiración, mi paz, mi alegría y mi hogar. 
+Contigo, todo parece posible y cada momento es único.
+
+Deseo que siempre recuerdes lo mucho que te amo, que cada día a tu lado es un regalo, 
+y que mi corazón late por ti hoy y siempre. ❤️
+`;
+
+let idx2 = 0;
+let typingTimeout2 = null;
+
+function mostrarCarta2() {
+  const carta2El = document.getElementById('carta2');
+  carta2El.style.display = 'block';
+  carta2El.setAttribute('tabindex','-1');
+  carta2El.focus();
+  escribirCarta2();
+}
+
+function escribirCarta2(){
+  const p = document.getElementById('textoCarta2');
+  if(idx2 < carta2Texto.length){
+    p.textContent += carta2Texto.charAt(idx2);
+    idx2++;
+    typingTimeout2 = setTimeout(escribirCarta2, 32);
+  }
+}
+
+/* Audio control */
+const audio = document.getElementById('bg-audio');
+audio.addEventListener('play', ()=>{});
+audio.addEventListener('error', ()=>{});
 setTimeout(()=>{
   if(audio.paused){
     const p = document.createElement('div');
@@ -347,18 +370,12 @@ setTimeout(()=>{
     p.style.right='18px';
     p.style.bottom='18px';
     p.style.zIndex='6';
-    p.innerHTML = '<button style=\"padding:10px 14px;border-radius:14px;border:none;background:linear-gradient(90deg,#ff76a1,#ff4d7a);color:#fff;font-weight:700;\">Reproducir música</button>';
+    p.innerHTML = '<button style="padding:10px 14px;border-radius:14px;border:none;background:linear-gradient(90deg,#ff76a1,#ff4d7a);color:#fff;font-weight:700;">Reproducir música</button>';
     document.body.appendChild(p);
-    p.querySelector('button').onclick = ()=>{
-      audio.play().catch(()=>{});
-      p.remove();
-    }
+    p.querySelector('button').onclick = ()=>{ audio.play().catch(()=>{}); p.remove(); }
   }
 },800);
-
-/* si quieres detener los corazones (si satura), llama clearInterval(heartInterval) */
 </script>
 
 </body>
 </html>
-
